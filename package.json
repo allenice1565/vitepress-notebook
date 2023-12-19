@@ -1,19 +1,24 @@
 {
-  "name": "vitepress-notebook",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "prettier": "^3.0.3",
-    "vitepress": "1.0.0-rc.15"
-  }
+    "name": "vitepress-notebook",
+    "version": "1.0.0",
+    "description": "",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "docs:dev": "vitepress dev docs",
+        "docs:build": "vitepress build docs",
+        "docs:preview": "vitepress preview docs"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/node": "^20.10.5",
+        "prettier": "^3.0.3",
+        "vitepress": "1.0.0-rc.15"
+    },
+    "dependencies": {
+        "dayjs": "^1.11.10",
+        "gray-matter": "^4.0.3"
+    }
 }
