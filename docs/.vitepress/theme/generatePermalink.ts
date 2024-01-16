@@ -16,78 +16,50 @@ interface IPermalink {
     dirnameSeperator?: string;
     filenameSeperator?: string;
 }
+interface IRawDir {
+    name: string;
+    path: string;
+    children?: Array<IRawDir>;
+}
 class Permalink {
     dir: string;
     customDirName: string;
     dirnameSeperator: string;
     filenameSeperator: string;
+    private rawDir: Array<IRawDir>;
     constructor({
-        dir,
-        customDirName,
-        dirnameSeperator,
-        filenameSeperator,
+        dir, // 存放文章的文件夹
+        customDirName, // 自定义页面文件夹名称
+        dirnameSeperator, // 文件夹名称分隔符
+        filenameSeperator, // 文件名分隔符
     }: IPermalink) {
         this.dir = dir;
         this.customDirName = customDirName || "custom-pages";
         this.dirnameSeperator = dirnameSeperator || "-";
         this.filenameSeperator = filenameSeperator || ".";
+        this.rawDir = [];
     }
-    readRawDir(dirPath: string = this.dir) {
+    private readRawDir(dirPath: string = this.dir) {
         const result = [];
         readdirSync(dirPath, {
             withFileTypes: true,
         }).forEach((item) => {
             const fPath = path.resolve(dirPath, item.name);
             if (item.isDirectory()) {
-                // const dirname = item.name
-                //     .split(this.dirnameSeperator)
-                //     .slice(1)
-                //     .join(this.dirnameSeperator);
                 result.push({
                     name: item.name,
                     path: fPath,
                     children: this.readRawDir(dirPath),
                 });
             } else {
-                const m = matter.read(fPath);
-                const data = m.data;
-                const hash = crypto
-                    .createHash("md5")
-                    .update(fPath)
-                    .digest("hex")
-                    .slice(0, 6);
-                const frontmatter = { ...data };
-                const title = item.name.split(".").slice(1, -1).join(".");
-                if (!data.title || !data.date || !data.permalink) {
-                    frontmatter.title = frontmatter.title || title;
-                    frontmatter.permalink =
-                        frontmatter.permalink || `/page/${hash}`;
-                    frontmatter.date =
-                        frontmatter.date ||
-                        dayjs().format("YYYY-MM-DD hh:mm:ss");
-                    frontmatter.categaries = [...categaries];
-                    frontmatter.author = {
-                        name: "allen",
-                        link: "https://github.com/allenice1565",
-                    };
-                    writeFile(fPath, matter.stringify(m.content, frontmatter));
-                }
-                const relativePath = path
-                    .normalize(fPath.split(articlePath)[1])
-                    .split(path.sep)
-                    .join("/")
-                    .slice(1);
-                rewrites[relativePath] = frontmatter.permalink.slice(1) + ".md";
                 result.push({
+                    name: item.name,
                     path: fPath,
-                    ...frontmatter,
                 });
             }
         });
         return result;
     }
-    private getDirectories(cb: () => void) {}
-    private getFiles(cb: () => void) {}
 }
 const rewrites = {};
 const getPosts = (filePath, categaries = []) => {
