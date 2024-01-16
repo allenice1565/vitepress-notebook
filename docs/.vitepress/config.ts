@@ -32,16 +32,31 @@ export default defineConfig({
                 ],
             },
         ],
-
         sidebar: {
-            "/front-end/js/": [
+            // 当用户位于 `guide` 目录时，会显示此侧边栏
+            "/pages/": [
                 {
-                    text: "node包管理工具",
-                    link: "/front-end/js/000.node包管理工具",
+                    text: "Guide",
+                    items: [
+                        { text: "Index", link: "/guide/" },
+                        { text: "One", link: "/guide/one" },
+                        { text: "Two", link: "/guide/two" },
+                    ],
+                },
+            ],
+
+            // 当用户位于 `config` 目录时，会显示此侧边栏
+            "/1-项目/": [
+                {
+                    text: "Config",
+                    items: [
+                        { text: "Index", link: "/config/" },
+                        { text: "Three", link: "/config/three" },
+                        { text: "Four", link: "/config/four" },
+                    ],
                 },
             ],
         },
-        x: {},
     },
     cleanUrls: true,
 });
