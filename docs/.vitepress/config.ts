@@ -1,5 +1,6 @@
 import { defineConfig } from "vitepress";
-import { rewrites } from "./theme/generatePermalink";
+import { rewrites } from "./theme/get-articles";
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
     title: "Allenice",
@@ -10,7 +11,7 @@ export default defineConfig({
     themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
         nav: [
-            { text: "首页", link: "/" },
+            { text: "首页", link: "/page/4a2328" },
             {
                 text: "前端",
                 items: [
