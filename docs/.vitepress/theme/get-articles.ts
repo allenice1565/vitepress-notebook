@@ -32,6 +32,7 @@ class ArticleInfo {
     filenameSeperator: string;
     posts: Array<IPageInfo>;
     rewrites: Record<string, string> = {};
+    sideBars: Record<string, any> = {};
     constructor({
         dir, // 存放文章的文件夹
         customDirName, // 自定义页面文件夹名称
@@ -44,7 +45,7 @@ class ArticleInfo {
         this.filenameSeperator = filenameSeperator || ".";
         this.posts = this.readRawDir();
         this.rewrites = this.generateRewrites();
-        console.log(123);
+        this.sideBars = this.generateSideBars();
     }
     /**
      * 读取文件夹下的所有文章
@@ -141,65 +142,36 @@ class ArticleInfo {
         });
         return rewrites;
     }
+
+    private generateSideBars(
+        pages = this.posts,
+        level = 1,
+    ): Record<string, any> {
+        // 生成侧边栏
+        const sideBars = [];
+        const result: Record<string, any> = {};
+        pages.forEach((item) => {
+            if (item.isDir) {
+                sideBars.push({
+                    text: item.parsedName,
+                    items: this.generateSideBars(item.children, level + 1),
+                });
+            } else {
+                sideBars.push({
+                    text: item.parsedName,
+                    link: item.permalink,
+                });
+            }
+        });
+        if (level === 1) return { "/page/": { items: sideBars } };
+        return sideBars;
+    }
 }
 const articleInfo = new ArticleInfo({
     dir: articlePath,
 });
-// const rewrites = {};
-// const getPosts = (filePath, categaries = []) => {
-//     const result = [];
-//     readdirSync(filePath, {
-//         withFileTypes: true,
-//     }).forEach((item) => {
-//         const fPath = path.resolve(filePath, item.name);
-//         if (item.isDirectory()) {
-//             const dirname = item.name.split("-").slice(1).join("-");
-//             result.push({
-//                 name: item.name,
-//                 path: fPath,
-//                 children: getPosts(fPath, [...categaries, dirname]),
-//             });
-//         } else {
-//             const m = matter.read(fPath);
-//             const data = m.data;
-//             const hash = crypto
-//                 .createHash("md5")
-//                 .update(fPath)
-//                 .digest("hex")
-//                 .slice(0, 6);
-//             const frontmatter = { ...data };
-//             const title = item.name.split(".").slice(1, -1).join(".");
-//             if (!data.title || !data.date || !data.permalink) {
-//                 frontmatter.title = frontmatter.title || title;
-//                 frontmatter.permalink =
-//                     frontmatter.permalink || `/page/${hash}`;
-//                 frontmatter.date =
-//                     frontmatter.date || dayjs().format("YYYY-MM-DD hh:mm:ss");
-//                 frontmatter.categaries = [...categaries];
-//                 frontmatter.author = {
-//                     name: "allen",
-//                     link: "https://github.com/allenice1565",
-//                 };
-//                 writeFile(fPath, matter.stringify(m.content, frontmatter));
-//             }
-//             const relativePath = path
-//                 .normalize(fPath.split(articlePath)[1])
-//                 .split(path.sep)
-//                 .join("/")
-//                 .slice(1);
-//             rewrites[relativePath] = frontmatter.permalink.slice(1) + ".md";
-//             result.push({
-//                 path: fPath,
-//                 ...frontmatter,
-//             });
-//         }
-//     });
-//     return result;
-// };
-// const posts = getPosts(articlePath);
 const posts = articleInfo.posts;
 const rewrites = articleInfo.rewrites;
-// console.log("articleInfo.posts", articleInfo.posts[0].children[0]);
-console.log("articleInfo.rewrites", articleInfo.rewrites);
+const sideBars = articleInfo.sideBars;
 
-export { posts, rewrites };
+export { posts, rewrites, sideBars };

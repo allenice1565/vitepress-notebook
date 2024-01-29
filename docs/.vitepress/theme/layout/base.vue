@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { useData } from "vitepress";
 import { data } from "../posts.data";
-const { page } = useData();
-console.log({ data, page });
+import DefaultTheme from "vitepress/theme";
+
+const { Layout } = DefaultTheme;
+const { page, frontmatter } = useData();
+console.log({ data, page, frontmatter });
 </script>
 <template>
     <div>
         <div v-if="page.isNotFound">Custom 404 page!</div>
-        <Content v-else />
+        <Layout v-else />
     </div>
 </template>

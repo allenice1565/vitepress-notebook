@@ -1,5 +1,5 @@
 import { defineConfig } from "vitepress";
-import { rewrites } from "./theme/get-articles";
+import { rewrites, sideBars } from "./theme/get-articles";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -33,31 +33,7 @@ export default defineConfig({
                 ],
             },
         ],
-        sidebar: {
-            // 当用户位于 `guide` 目录时，会显示此侧边栏
-            "/pages/": [
-                {
-                    text: "Guide",
-                    items: [
-                        { text: "Index", link: "/guide/" },
-                        { text: "One", link: "/guide/one" },
-                        { text: "Two", link: "/guide/two" },
-                    ],
-                },
-            ],
-
-            // 当用户位于 `config` 目录时，会显示此侧边栏
-            "/1-项目/": [
-                {
-                    text: "Config",
-                    items: [
-                        { text: "Index", link: "/config/" },
-                        { text: "Three", link: "/config/three" },
-                        { text: "Four", link: "/config/four" },
-                    ],
-                },
-            ],
-        },
+        sidebar: sideBars,
     },
     cleanUrls: true,
 });

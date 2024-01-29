@@ -1,10 +1,11 @@
-// import BaseLayout from "./layout/base.vue";
-// import type { Theme } from "vitepress";
-// import "./custom.css";
-
-// export default {
-//     Layout: BaseLayout,
-// } satisfies Theme;
-
 import DefaultTheme from "vitepress/theme";
-export default DefaultTheme;
+import BaseLayout from "./layout/base.vue";
+import type { Theme } from "vitepress";
+
+export default {
+    ...DefaultTheme,
+    Layout: BaseLayout,
+    enhanceApp(ctx) {
+        DefaultTheme.enhanceApp(ctx);
+    },
+} satisfies Theme;
