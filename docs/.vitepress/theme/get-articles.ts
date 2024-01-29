@@ -106,7 +106,7 @@ class ArticleInfo {
         // 文章的frontmatter没有标题或者日期或者永久链接的时候，自动给文章添加标题，日期，永久链接
         if (!data.title || !data.date || !data.permalink) {
             frontmatter.title = frontmatter.title || title;
-            frontmatter.permalink = frontmatter.permalink || `/page/${hash}`;
+            frontmatter.permalink = frontmatter.permalink || `/pages/${hash}/`;
             frontmatter.date =
                 frontmatter.date || dayjs().format("YYYY-MM-DD hh:mm:ss");
             frontmatter.categaries = [...categaries];
@@ -138,7 +138,7 @@ class ArticleInfo {
                 .relative(`${this.dir}/../`, item.absolutePath)
                 .split(path.sep)
                 .join(path.posix.sep);
-            rewrites[relativePath] = `${item.permalink.slice(1)}.md`;
+            rewrites[relativePath] = `${item.permalink.slice(1, -1)}.md`;
         });
         return rewrites;
     }
@@ -149,7 +149,6 @@ class ArticleInfo {
     ): Record<string, any> {
         // 生成侧边栏
         const sideBars = [];
-        const result: Record<string, any> = {};
         pages.forEach((item) => {
             if (item.isDir) {
                 sideBars.push({
@@ -159,11 +158,12 @@ class ArticleInfo {
             } else {
                 sideBars.push({
                     text: item.parsedName,
-                    link: item.permalink,
+                    link: item.permalink.slice(0, -1),
+                    // link: `/${item.permalink.split("/").at(-2)}/`,
                 });
             }
         });
-        if (level === 1) return { "/page/": { items: sideBars } };
+        if (level === 1) return { "/pages/": { items: sideBars } };
         return sideBars;
     }
 }
