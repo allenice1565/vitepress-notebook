@@ -8,7 +8,7 @@ export default defineConfig({
     base: "/",
     srcDir: "src",
     rewrites: {
-        "custom-pages/index.md": "home.md",
+        "custom-pages/index.md": "index.md",
         ...rewrites,
     },
     themeConfig: {
@@ -16,7 +16,7 @@ export default defineConfig({
         nav: [
             {
                 text: "首页",
-                link: "/home",
+                link: "/",
             },
             {
                 text: "前端",
