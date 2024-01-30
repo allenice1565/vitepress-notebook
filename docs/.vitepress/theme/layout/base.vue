@@ -2,21 +2,24 @@
 import { useData } from "vitepress";
 import { data } from "../posts.data";
 import DefaultTheme from "vitepress/theme";
+import NotFound from "../components/not-fund.vue";
 
 const { Layout } = DefaultTheme;
 const { page, frontmatter } = useData();
 console.log({ data, page, frontmatter });
 </script>
 <template>
-    <div>
-        <div v-if="page.isNotFound">Custom 404 page!</div>
-        <Layout v-else>
-            <template #page-top>123</template>
-        </Layout>
-    </div>
+    <Layout>
+        <template #page-top>123</template>
+        <template #not-found>
+            <NotFound />
+        </template>
+    </Layout>
 </template>
 <style>
-.content .outline-title {
-    display: none;
+.content .outline-title,
+.VPDocOutlineDropdown,
+.VPLocalNavOutlineDropdown {
+    display: none !important;
 }
 </style>
