@@ -10,6 +10,13 @@ console.log({ data, page, frontmatter });
 <template>
     <div>
         <div v-if="page.isNotFound">Custom 404 page!</div>
-        <Layout v-else />
+        <Layout v-else>
+            <template #page-top>123</template>
+        </Layout>
     </div>
 </template>
+<style>
+.content .outline-title {
+    display: none;
+}
+</style>

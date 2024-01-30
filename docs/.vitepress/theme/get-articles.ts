@@ -1,3 +1,4 @@
+import { DefaultTheme } from "vitepress";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { readdirSync } from "node:fs";
@@ -75,7 +76,7 @@ class ArticleInfo {
                     rawName: item.name,
                     parsedName: item.name
                         .split(this.filenameSeperator)
-                        .slice(1)
+                        .slice(1, -1)
                         .join(this.filenameSeperator),
                     absolutePath: fPath,
                     category: [...category],
