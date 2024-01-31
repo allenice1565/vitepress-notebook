@@ -1,10 +1,8 @@
-import { DefaultTheme } from "vitepress";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { readdirSync } from "node:fs";
 import crypto from "node:crypto";
 import matter from "gray-matter";
-import dayjs from "dayjs";
 import { writeFile } from "node:fs/promises";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -108,8 +106,7 @@ class ArticleInfo {
         if (!data.title || !data.date || !data.permalink) {
             frontmatter.title = frontmatter.title || title;
             frontmatter.permalink = frontmatter.permalink || `/pages/${hash}/`;
-            frontmatter.date =
-                frontmatter.date || dayjs().format("YYYY-MM-DD hh:mm:ss");
+            frontmatter.date = frontmatter.date || getDate();
             frontmatter.categaries = [...categaries];
             frontmatter.author = {
                 name: "Allen",
@@ -160,13 +157,28 @@ class ArticleInfo {
                 sideBars.push({
                     text: item.parsedName,
                     link: item.permalink.slice(0, -1),
-                    // link: `/${item.permalink.split("/").at(-2)}/`,
                 });
             }
         });
         if (level === 1) return { "/pages/": { items: sideBars } };
         return sideBars;
     }
+}
+
+function getDate() {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month =
+        date.getMonth() + 1 < 10
+            ? "0" + (date.getMonth() + 1)
+            : date.getMonth() + 1;
+    const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+    const hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+    const minute =
+        date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+    const second =
+        date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+    return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 }
 const articleInfo = new ArticleInfo({
     dir: articlePath,
