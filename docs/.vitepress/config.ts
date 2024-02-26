@@ -15,11 +15,8 @@ export default defineConfig({
         // https://vitepress.dev/reference/default-theme-config
         nav: [
             {
-                text: "首页",
-                link: "/",
-            },
-            {
                 text: "前端",
+                link: "/",
                 items: [
                     {
                         text: "JavaScript",
